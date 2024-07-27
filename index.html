@@ -13,9 +13,10 @@
             font-size: 16px;
         }
         h1 {
-            color: #1976d2; /* שינוי הצבע לכחול */
+            color: #1976d2;
             text-align: center;
             font-size: 24px;
+            font-weight: bold;
         }
         .content-wrapper {
             max-width: 600px;
@@ -36,10 +37,9 @@
             background-color: #f2f2f2;
             font-weight: bold;
         }
-        .search-inputs, #idInput, #hebrewMonthSelect, #gregMonthSelect, #houseSelect {
-            width: calc(50% - 12px);
+        .search-inputs, #idInput, #hebrewMonthSelect, #gregMonthSelect, #houseSelect, #upcomingSelect {
             padding: 12px;
-            margin-bottom: 8px; /* צמצום המרווח בין התיבות */
+            margin-bottom: 8px;
             margin-right: 12px;
             box-sizing: border-box;
             border: 1px solid #ddd;
@@ -49,8 +49,8 @@
         #searchInput {
             width: calc(100% - 24px);
         }
-        #houseSelect, #idInput {
-            width: calc(90% - 12px); /* התאמת הרוחב לנוחות */
+        #houseSelect, #idInput, #upcomingSelect {
+            width: calc(100% - 24px);
         }
         .search-inputs {
             background-color: #e0f7fa;
@@ -66,7 +66,7 @@
         }
         .search-label {
             display: block;
-            margin-bottom: 4px; /* צמצום המרווח מתחת לכותרת */
+            margin-bottom: 4px;
             font-weight: bold;
         }
         .background-eliyassaf { background-color: #ffe6e6; }
@@ -82,7 +82,7 @@
             border-radius: 4px;
             margin-top: 10px;
         }
-        .reset-btn {
+        .reset-btn, .upcoming-btn {
             width: 100%;
             padding: 12px;
             margin-bottom: 8px;
@@ -90,9 +90,15 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
+            cursor: pointer;
+        }
+        .reset-btn {
             background-color: #f44336;
             color: #fff;
-            cursor: pointer;
+        }
+        .upcoming-btn {
+            background-color: #1976d2;
+            color: #fff;
         }
         .id-link {
             color: #1976d2;
@@ -100,9 +106,39 @@
             cursor: pointer;
         }
         #currentDate {
-            margin-bottom: 8px; /* צמצום המקום שתופס התאריך */
+            margin-bottom: 8px;
             text-align: center;
             font-size: 14px;
+        }
+        .hebrew-birthday {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .greg-birthday {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .search-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .upcoming-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        .upcoming-container label, .upcoming-container select, .upcoming-container button {
+            margin-top: 8px;
+        }
+        .upcoming-container select {
+            background-color: #1976d2;
+            color: #fff;
+            width: calc(60% - 12px); /* התאמת רוחב תיבת החיפוש */
+        }
+        .upcoming-container button {
+            width: calc(40% - 12px); /* התאמת רוחב כפתור החיפוש */
         }
     </style>
 </head>
@@ -115,7 +151,7 @@
             <label class="search-label" for="searchInput">חיפוש:</label>
             <input type="text" id="searchInput" class="search-inputs" placeholder="חפש שם, תאריך, חודש או בית אב...">
         </div>
-        <div style="display: flex; justify-content: space-between;">
+        <div class="search-container">
             <div>
                 <label class="search-label" for="houseSelect">חיפוש לפי בית אב:</label>
                 <select id="houseSelect" class="search-inputs">
@@ -135,10 +171,10 @@
             </div>
         </div>
         
-        <div style="display: flex; justify-content: space-between;">
-            <div>
+        <div class="search-container">
+            <div style="width: calc(50% - 12px);">
                 <label class="search-label" for="hebrewMonthSelect">יום הולדת לפי חודש עברי:</label>
-                <select id="hebrewMonthSelect" class="search-inputs">
+                <select id="hebrewMonthSelect" class="search-inputs" style="width: 100%;">
                     <option value="">בחר חודש עברי...</option>
                     <option value="תשרי">תשרי</option>
                     <option value="חשוון">חשוון</option>
@@ -154,9 +190,9 @@
                     <option value="אלול">אלול</option>
                 </select>
             </div>
-            <div>
+            <div style="width: calc(50% - 12px);">
                 <label class="search-label" for="gregMonthSelect">יום הולדת לפי חודש לועזי:</label>
-                <select id="gregMonthSelect" class="search-inputs">
+                <select id="gregMonthSelect" class="search-inputs" style="width: 100%;">
                     <option value="">בחר חודש לועזי...</option>
                     <option value="01">ינואר</option>
                     <option value="02">פברואר</option>
@@ -174,6 +210,22 @@
             </div>
         </div>
         
+        <div class="upcoming-container">
+            <div style="width: calc(60% - 12px);">
+                <label class="search-label" for="upcomingSelect">הצג ימי הולדת קרובים:</label>
+                <select id="upcomingSelect" class="search-inputs" style="width: 100%;">
+                    <option value="today">היום</option>
+                    <option value="7">7 ימים</option>
+                    <option value="30">30 ימים</option>
+                    <option value="60">60 ימים</option>
+                    <option value="90">90 ימים</option>
+                </select>
+            </div>
+            <div style="width: calc(40% - 12px);">
+                <button class="upcoming-btn" onclick="showUpcomingBirthdays()" style="width: 100%;">להצגת ימי הולדת לחץ כאן</button>
+            </div>
+        </div>
+
         <button class="reset-btn" onclick="resetSearch()">נקה חיפוש</button>
         <p id="ageOutput"></p>
 
@@ -230,7 +282,7 @@
         {id: 328, firstName: "נעם רפאל", lastName: "רמות", parents: "מתניה ומירב", hebrewBirthDate: "ח' תמוז התשע\"ז", gregBirthDate: "20/06/2018", house: "מתניה"},
         {id: 329, firstName: "גפן", lastName: "רמות", parents: "מתניה ומירב", hebrewBirthDate: "ניסן התשפ\"א", gregBirthDate: "17/03/2021", house: "מתניה"},
         {id: 330, firstName: "<b>דניאל</b>", lastName: "<b>רמות</b>", parents: "אליסף ויהודית", hebrewBirthDate: "ג' תמוז התשנ\"ד", gregBirthDate: "22/06/1994", house: "דניאל"},
-        {id: 331, firstName: "<b>אופיר</b>", lastName: "<b>רמות</b>", parents: "-", hebrewBirthDate: "ח' חשון התשנ\"ז", gregBirthDate: "03/11/1997", house: "דניאל"},
+        {id: 331, firstName: "<b>אופיר</b>", lastName: "<b>רמות</ב>", parents: "-", hebrewBirthDate: "ח' חשון התשנ\"ז", gregBirthDate: "03/11/1997", house: "דניאל"},
         {id: 332, firstName: "הלל", lastName: "רמות", parents: "דניאל ואופיר", hebrewBirthDate: "ט' חשון התשפ\"ה", gregBirthDate: "23/10/2023", house: "דניאל"},
         {id: 333, firstName: "<b>רחלי</b>", lastName: "<b>אמיתי</b>", parents: "אליסף ויהודית", hebrewBirthDate: "ד' אלול התשפ\"א", gregBirthDate: "22/11/1995", house: "אמיתי"},
         {id: 334, firstName: "<b>תומר</b>", lastName: "<b>אמיתי</b>", parents: "-", hebrewBirthDate: "ז' אדר התשנ\"ז", gregBirthDate: "10/02/1997", house: "אמיתי"},
@@ -298,6 +350,7 @@
         document.getElementById('hebrewMonthSelect').value = '';
         document.getElementById('gregMonthSelect').value = '';
         document.getElementById('houseSelect').value = '';
+        document.getElementById('upcomingSelect').value = '7';
         document.getElementById('idInput').value = '';
         document.getElementById('ageOutput').innerHTML = '';
         searchTable();
@@ -336,12 +389,12 @@
                 מזהה ${idValue}:<br>
                 ${person.firstName} ${person.lastName}<br>
                 ההורים: <b>${person.parents}</b><br>
-                גיל: <span class="highlight">${age} שנים</span><br>
+                גיל: <span class="highlight">${age}</span><br>
                 תאריך לידה עברי: <span class="highlight-date">${person.hebrewBirthDate}</span><br>
                 תאריך לידה לועזי: <span class="highlight-date">${person.gregBirthDate}</span><br>
                 יום הולדת הבא בעוד <span class="highlight">${daysToNextBirthday} ימים</span><br>
                 בתאריך: <span class="highlight-date">${nextBirthdayStr} (${dayOfWeekHeb})</span><br>
-                גיל ביום ההולדת הקרוב: <span class="highlight">${age + 1} שנים</span>
+                גיל ביום ההולדת הקרוב: <span class="highlight">${age + 1}</span>
             `;
         } else {
             ageOutput.innerHTML = "לא נמצא אדם עם מזהה זה";
@@ -363,6 +416,59 @@
             year: 'numeric'
         }).format(now);
         document.getElementById('currentDate').innerHTML = `בס"ד<br>היום: ${hebrewDate}<br>תאריך לועזי: ${gregorianDate}`;
+    }
+
+    function showUpcomingBirthdays() {
+        const today = new Date();
+        const daysToShow = parseInt(document.getElementById('upcomingSelect').value);
+
+        const upcomingBirthdays = familyData.filter(person => {
+            const gregBirthDate = new Date(person.gregBirthDate.split("/").reverse().join("-"));
+            const nextBirthday = new Date(today.getFullYear(), gregBirthDate.getMonth(), gregBirthDate.getDate());
+            if (today > nextBirthday) {
+                nextBirthday.setFullYear(today.getFullYear() + 1);
+            }
+            const daysToNextBirthday = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+
+            return daysToNextBirthday <= daysToShow;
+        });
+
+        const sortedBirthdays = upcomingBirthdays.sort((a, b) => {
+            const aDate = new Date(a.gregBirthDate.split("/").reverse().join("-"));
+            const bDate = new Date(b.gregBirthDate.split("/").reverse().join("-"));
+            return aDate - bDate;
+        });
+
+        const ageOutput = document.getElementById("ageOutput");
+        ageOutput.innerHTML = `<b>ימי הולדת קרובים ב-${daysToShow} הימים הקרובים:</b><br>`;
+
+        if (sortedBirthdays.length === 0) {
+            ageOutput.innerHTML += "אין ימי הולדת במשפחה.";
+        } else {
+            sortedBirthdays.forEach(person => {
+                const birthDate = new Date(person.gregBirthDate.split("/").reverse().join("-"));
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+
+                const nextGregorianBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+                if (today > nextGregorianBirthday) {
+                    nextGregorianBirthday.setFullYear(today.getFullYear() + 1);
+                }
+                const daysToNextGregorianBirthday = Math.ceil((nextGregorianBirthday - today) / (1000 * 60 * 60 * 24));
+
+                ageOutput.innerHTML += `
+                    <div class="${person.house.toLowerCase().replace(" ", "_")}">
+                        <b>${person.firstName} ${person.lastName}</b> - תאריך לועזי: <span class="greg-birthday">${person.gregBirthDate}</span>, 
+                        תאריך עברי: <span class="hebrew-birthday">${person.hebrewBirthDate}</span><br>
+                        גיל ביום ההולדת הקרוב: ${age + 1},<br>
+                        ימים ליום הולדת לועזי: ${daysToNextGregorianBirthday}
+                    </div>`;
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
